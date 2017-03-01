@@ -1,11 +1,11 @@
 function doPost(e){
-  var sheets = SpreadsheetApp.openById(' /* Add Spreadsheet Id Here*/ '); //
+  var sheets = SpreadsheetApp.openById(getSpreadsheet());
   var amount = String(e.parameters.text).replace("@counter ", '');
     var user = e.parameters.user_name.toString();
     var userid = e.parameters.user_id.toString();
   if(amount.isNumber()){
     var time = new Date(e.parameters.timestamp * 1000);
-    var shifts = CalendarApp.getCalendarsByName(' /*  Add Calendar Here */ ')[0].getEventsForDay(time);
+    var shifts = CalendarApp.getCalendarsByName(getCalendar())[0].getEventsForDay(time);
     var workers = '';
     for (var i in shifts){
       if(shifts[i].getStartTime() <= new Date() && shifts[i].getEndTime() >= new Date()) {
@@ -17,7 +17,7 @@ function doPost(e){
     sheets.appendRow([time, amount, workers, user]);
     var payload = {
       "username" : "People Counter", //bot name
-      "text" : "Hey <@" + userid + "|" + user + ">, you just added \n `" + amount + " people @ " + time.toString() + "`\n in the People Count!" , //message request
+      "text" : "Hey <@" + userid + ">, you just added \n `" + amount + " people @ " + time.toString() + "`\n in the People Count!" , //message request
       "icon-emoji" : ":man-woman-girl-boy:", //bot icon
     };
   }
